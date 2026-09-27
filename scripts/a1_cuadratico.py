@@ -1,7 +1,7 @@
 """A.1: ajuste cuadratico sound_level(frequency), derivada, punto critico + figura.
 
-Usa src/metrics.py para R2/SCE/STC (contrato #2) y
-src/data_loader.load_airfoil (contrato #1).
+Usa src/metrics.py para R2/SCE/STC y
+src/data_loader.load_airfoil.
 Salida: docs/figs/a1_aproximacion.png + resumen numerico por consola.
 """
 import numpy as np
@@ -15,24 +15,24 @@ df = load_airfoil("data/airfoil_self_noise.dat")
 x = df["frequency"].to_numpy(float)
 y = df["sound_level"].to_numpy(float)
 
-# 1. Ajustes (minimos cuadrados via lstsq; cuadratico === polyfit grado 2)
-b2, b1, b0 = np.polyfit(x, y, 2)
-bl1, bl0 = np.polyfit(x, y, 1)
+# 1. Ajustes por minimos cuadrados:  min  Σᵢ [yᵢ − ŷ(xᵢ)]²
+b2, b1, b0 = np.polyfit(x, y, 2)   # ŷ(x) = β₀ + β₁·x + β₂·x²
+bl1, bl0 = np.polyfit(x, y, 1)     # ŷ(x) = β₀ + β₁·x  (recta A.2/B.1)
 
-# 2. Derivada del cuadratico en dos x del rango
+# 2. Derivada del cuadratico en dos x del rango:  dŷ/dx = β₁ + 2·β₂·x
 EVAL = (1000.0, 10000.0)
-der = {xs: b1 + 2 * b2 * xs for xs in EVAL}
+der = {xs: b1 + 2 * b2 * xs for xs in EVAL}   # dŷ/dx│ₓ = β₁ + 2β₂x
 
-# 3. Punto critico + clasificacion
-xc = -b1 / (2 * b2)
-segunda = 2 * b2
-yc = b0 + b1 * xc + b2 * xc ** 2
-dentro = 200.0 <= xc <= 20000.0
+# 3. Punto critico (dŷ/dx = 0) + clasificacion con 2da derivada
+xc = -b1 / (2 * b2)        # x* = −β₁ / (2β₂)
+segunda = 2 * b2           # d²ŷ/dx² = 2β₂  (>0 → mínimo, <0 → máximo)
+yc = b0 + b1 * xc + b2 * xc ** 2   # y* = ŷ(x*) = β₀ + β₁x* + β₂x*²
+dentro = 200.0 <= xc <= 20000.0    # ¿x* ∈ [200, 20000] observado?
 
-# 4. Bondad de ajuste (contrato)
+# 4. Bondad de ajuste (contrato):  SCE = Σᵢ(yᵢ−ŷᵢ)²,  STC = Σᵢ(yᵢ−ȳ)²,  R² = 1 − SCE/STC
 def r2_ajuste(yh):
-    sce = float(((y - yh) ** 2).sum())
-    return m.r2(sce, m.stc(y)), sce
+    sce = float(((y - yh) ** 2).sum())   # SCE = Σ(yᵢ − ŷᵢ)²
+    return m.r2(sce, m.stc(y)), sce      # R² = 1 − SCE/STC
 
 xg = np.linspace(200, 20000, 400)
 yh_q = b0 + b1 * xg + b2 * xg ** 2
@@ -61,7 +61,7 @@ ax1.annotate(f"minimo x*={xc:.0f} Hz", (xc, yc),
 ax1.set_ylabel("sound_level (dB)")
 ax1.legend(fontsize=9)
 ax1.set_title("A.1 — Aproximacion cuadratica vs lineal del ruido (dB) en funcion de la frecuencia (Hz)")
-res_q = y - (b0 + b1 * x + b2 * x ** 2)
+res_q = y - (b0 + b1 * x + b2 * x ** 2)   # eᵢ = yᵢ − ŷ(xᵢ), con ŷ(x) = β₀ + β₁x + β₂x²
 ax2.scatter(x, res_q, s=8, alpha=0.35)
 ax2.axhline(0, color="k", lw=1)
 ax2.set_xlabel("frequency (Hz)")
