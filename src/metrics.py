@@ -144,3 +144,11 @@ def t_crit_95(df):
     if nearest >= 120 or df >= 120:
         return 1.96
     return _T975[nearest]
+
+def suma_x(x):
+    """Calcula Σxᵢ - sumatoria de todos los valores de X"""
+    return np.sum(x)
+
+def suma_y(y):
+    """Calcula Σyᵢ - sumatoria de todos los valores de Y"""
+    return np.sum(y)
