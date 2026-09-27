@@ -1,4 +1,4 @@
-"""Contrato numerico unico del TP (Esquema T, issue #2 CONGELADO).
+"""Contrato numerico unico del TP.
 
 T1/T2/T3 lo IMPORTAN, no lo duplican. Todo en numpy (sin sklearn/scipy).
 Funciones puras sobre vectores 1-D. Nombres congelados:

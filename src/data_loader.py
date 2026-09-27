@@ -27,7 +27,7 @@ def load_airfoil(path: str) -> pd.DataFrame:
     Raises
     ------
     ValueError
-        If dataset shape is not 1503×6, sound_level is outside [103.4, 141.0],
+        If dataset shape is not 1503 x 6, sound_level is outside [103.4, 141.0],
         or column order is incorrect
     """
     # Download if file doesn't exist
