@@ -7,6 +7,7 @@ ic_beta, icm_ip (+ helpers se_beta1/se_beta0, t_stat, r_corr, r2_adj,
 t_crit_95, yhat).
 """
 import numpy as np
+from src.data_loader import load_airfoil
 
 __all__ = ["xbar", "ybar", "Sxx", "Sxy", "beta1", "beta0", "yhat",
            "sce", "stc", "scr", "sigma2", "r2", "r_corr", "r2_adj",
@@ -145,10 +146,12 @@ def t_crit_95(df):
         return 1.96
     return _T975[nearest]
 
-def suma_x(x):
-    """Calcula Σxᵢ - sumatoria de todos los valores de X"""
-    return np.sum(x)
+def suma_x():
+    """Calcula y retorna Σxᵢ (sumatoria de frequency)"""
+    df = load_airfoil('data/airfoil_self_noise.dat')
+    return np.sum(df['frequency'])
 
-def suma_y(y):
-    """Calcula Σyᵢ - sumatoria de todos los valores de Y"""
-    return np.sum(y)
+def suma_y():
+    """Calcula y retorna Σyᵢ (sumatoria de sound_level)"""
+    df = load_airfoil('data/airfoil_self_noise.dat')
+    return np.sum(df['sound_level'])
