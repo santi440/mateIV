@@ -1,45 +1,36 @@
-"""Estado derivado de las issues según sus dependencias (sin etiquetas manuales).
+"""Estado de issues según el bloqueo nativo de GitHub (blocked by).
 
-GitHub solo tiene estados OPEN/CLOSED por issue. El 'bloqueo' se deriva:
-una issue está LISTA si todas sus dependencias están CLOSED; si no, BLOQUEADA.
 Uso: python scripts/issue_status.py
-Requiere: gh auth login (usa `gh issue list`).
+Requiere: gh auth login.
+Lee `issue_dependencies_summary` + `state` vía API: una issue OPEN con
+dependencias sin cerrar sale BLOQUEADA; sin dependencias pendientes, LISTA.
 """
 import json
 import subprocess
 
-DEPS = {
-    1: [], 2: [],
-    3: [1], 4: [1, 2], 5: [1], 6: [1, 2],
-    7: [1, 2, 6], 8: [1, 2], 9: [8],
-    10: [1, 2], 11: [10, 2],
-    12: [5, 6, 7, 8, 9, 10, 11],
-    13: [],
-    14: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-}
 
-
-def fetch_states():
+def fetch():
     r = subprocess.run(
-        ["gh", "issue", "list", "--limit", "50", "--state", "all",
-         "--json", "number,state,title"],
+        ["gh", "api", "repos/santi440/mateIV/issues", "--paginate",
+         "--jq", ".[] | {number, state, title, blocked: .issue_dependencies_summary.blocked_by}"],
         capture_output=True, text=True, check=True)
-    return {i["number"]: (i["state"], i["title"]) for i in json.loads(r.stdout)}
+    return [json.loads(line) for line in r.stdout.splitlines() if line.strip()]
 
 
 def main():
-    states = fetch_states()
+    rows = sorted(fetch(), key=lambda d: d["number"])
+    by_num = {d["number"]: d for d in rows}
     print(f"{'#':>3}  {'GitHub':<7} {'Derivado':<9} Título")
-    for n in sorted(DEPS):
-        gh_state, title = states.get(n, ("?", "?"))
-        if gh_state == "CLOSED":
+    for d in rows:
+        n = d["number"]
+        if d["state"] == "closed":
             derived = "HECHA"
-        elif all(states.get(d, ("?",))[0] == "CLOSED" for d in DEPS[n]):
+        elif d["blocked"] == 0:
             derived = "LISTA"
         else:
-            missing = [d for d in DEPS[n] if states.get(d, ("?",))[0] != "CLOSED"]
-            derived = f"BLOQUEADA por {','.join(f'#{d}' for d in missing)}"
-        print(f"#{n:<3} {gh_state:<7} {derived:<9} {title}")
+            derived = f"BLOQUEADA x{d['blocked']}"
+        _ = by_num
+        print(f"#{n:<3} {d['state']:<7} {derived:<9} {d['title']}")
 
 
 if __name__ == "__main__":

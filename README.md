@@ -28,18 +28,15 @@ Datos: descargar sin commitear:
 mkdir -p data && curl -L https://raw.githubusercontent.com/dsgiitr/d2l-pytorch/master/data/airfoil_self_noise.dat -o data/airfoil_self_noise.dat
 ```
 
-## Estado de issues (derivado, sin etiquetas)
+## Estado de issues (bloqueo nativo de GitHub)
 
-GitHub solo distingue OPEN/CLOSED. El bloqueo se deriva del estado de las
-dependencias (ver `## Dependencias` en cada issue):
+Las dependencias están cableadas con el bloqueo nativo (`blocked by`):
+GitHub muestra y desbloquea cada issue solo cuando cierran aquellas de las
+que depende. Listado rápido:
 
 ```bash
 python scripts/issue_status.py
 ```
-
-Una issue sale LISTA cuando todas sus dependencias están CLOSED; si no,
-BLOQUEADA por las que sigan OPEN. Al cerrar una issue, volver a correr el
-script para ver qué se desbloquea.
 
 ## Workflow (ver AGENTS.md)
 Ramas `t0/... t1/... t2/... t3/...`, un PR = una issue, reviewer cruzado obligatorio.
