@@ -1,7 +1,7 @@
 """A.1: ajuste cuadratico sound_level(frequency), derivada, punto critico + figura.
 
-Usa src/metrics.py para R2/SCE/STC (contrato #2). Carga directa del .dat
-(pasar a load_airfoil cuando cierre #1).
+Usa src/metrics.py para R2/SCE/STC (contrato #2) y
+src/data_loader.load_airfoil (contrato #1).
 Salida: docs/figs/a1_aproximacion.png + resumen numerico por consola.
 """
 import numpy as np
@@ -9,12 +9,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from src import metrics as m
+from src.data_loader import load_airfoil
 
-COLS = ["frequency", "angle", "chord_length", "velocity",
-        "displacement", "sound_level"]
-
-df = pd.read_csv("data/airfoil_self_noise.dat", sep="\t",
-                 header=None, names=COLS)
+df = load_airfoil("data/airfoil_self_noise.dat")
 x = df["frequency"].to_numpy(float)
 y = df["sound_level"].to_numpy(float)
 
