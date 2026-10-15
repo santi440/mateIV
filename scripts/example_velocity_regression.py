@@ -7,6 +7,7 @@ Nota: velocity se excluye del modelo final (consigna), pero sirve como ejemplo.
 
 import sys
 import os
+from src.data_loader import load_airfoil
 
 # Agregar parent dir al path para importar src
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
