@@ -9,7 +9,7 @@ Repo modular: el cálculo vive en `src/`, el informe en `notebooks/informe.ipynb
 - `src/normales.py` — A.2: derivadas parciales, sistema normal y contraste con `polyfit`
 - `src/cuadratico.py` — A.1: ajuste cuadrático, derivada y punto crítico
 - `src/plots.py` — helpers de figuras con unidades
-- `notebooks/informe.ipynb` — narrativa + llamadas a `src/`
+- `notebooks/informe.ipynb` — informe preliminar ejecutable (EDA, A.1, A.2 y B.5)
 - `tests/test_repro.py` — chequeos de reproducibilidad
 
 ## Entorno virtual (venv) + requirements
@@ -27,6 +27,7 @@ python -c "from src.data_loader import load_airfoil; load_airfoil('data/airfoil_
 python -m scripts.eda
 python -m scripts.a2_normales
 python -m scripts.a1_cuadratico
+python -m scripts.b5_multiple
 ```
 
 Datos: descargar sin commitear:
