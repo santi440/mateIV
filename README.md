@@ -28,6 +28,16 @@ Datos: descargar sin commitear:
 mkdir -p data && curl -L https://raw.githubusercontent.com/dsgiitr/d2l-pytorch/master/data/airfoil_self_noise.dat -o data/airfoil_self_noise.dat
 ```
 
+## Tests
+```bash
+pip install pytest
+python -m pytest -q
+```
+
+`tests/test_repro.py` verifica `STC = SCR + SCE`, beta manual vs `polyfit`
+y gradiente de SCE nulo en el óptimo. El contraste completo de A.3
+(descenso por gradiente vs solución exacta) se agrega con #11.
+
 ## Estado de issues (bloqueo nativo de GitHub)
 
 Las dependencias están cableadas con el bloqueo nativo (`blocked by`):
