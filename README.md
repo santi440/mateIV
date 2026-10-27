@@ -5,6 +5,8 @@ Repo modular: el cálculo vive en `src/`, el informe en `notebooks/informe.ipynb
 ## Estructura
 - `src/data_loader.py` — carga y validación del `.dat`
 - `src/metrics.py` — única implementación de Sxx, Sxy, betas, SCE/STC/SCR, σ², R², IC/IP, t-test
+- `src/multiple.py` — B.5: regresión múltiple matricial y R² ajustado
+- `src/gradiente.py` — A.3: descenso por gradiente con features estandarizadas
 - `src/normales.py` — A.2: derivadas parciales, sistema normal y contraste con `polyfit`
 - `src/plots.py` — helpers de figuras con unidades
 - `notebooks/informe.ipynb` — narrativa + llamadas a `src/`
@@ -22,6 +24,7 @@ pip install -r requirements.txt
 ```bash
 pip install -r requirements.txt
 python -c "from src.data_loader import load_airfoil; load_airfoil('data/airfoil_self_noise.dat')"
+python -m scripts.a3_gradiente
 python -m scripts.a2_normales
 ```
 
