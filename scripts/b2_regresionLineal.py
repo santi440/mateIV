@@ -39,4 +39,5 @@ ic_b0 = ic_beta(b0, se_b0, tc)
 icm_lo, icm_hi, ip_lo, ip_hi = icm_ip(2000, b0, b1, s2, n, xb, sxx, tc)
 
 # Paso 3: loop sobre VARIABLES y tabla final
+#prueba mail
 # Paso 4: elección de la mejor variable
