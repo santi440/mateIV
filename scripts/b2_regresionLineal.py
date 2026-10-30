@@ -3,9 +3,9 @@ import numpy as np
 import pandas as pd
 from src.data_loader import load_airfoil
 from src.metrics import (
-    xbar, ybar, Sxx, Sxy, beta1, beta0, yhat,
+    xbar, ybar, Sxx, Sxy, beta1, beta0,
     sce, stc, scr, sigma2, r2, r_corr,
-    se_beta1, se_beta0, ic_beta, icm_ip, t_crit_95,
+    se_beta1, se_beta0, ic_beta, icm_ip, t_crit_95, t_stat,
 )
 
 DATA_PATH = "data/airfoil_self_noise.dat"
@@ -39,7 +39,6 @@ se_b0 = se_beta0(s2, sxx, xb, n)
 ic_b0 = ic_beta(b0, se_b0, tc)
 icm_lo, icm_hi, ip_lo, ip_hi = icm_ip(2000, b0, b1, s2, n, xb, sxx, tc)
 
-# Paso 3: loop sobre VARIABLES y tabla final
 
 XSTAR = {"frequency": 2000.0}
 
@@ -58,6 +57,7 @@ def ajustar(var):
     s2 = sigma2(e, n)
     R2 = r2(e, syy)
     r = r_corr(sxy, sxx, syy)
+    T = t_stat(b1, s2, sxx)
 
     tc = t_crit_95(n - 2)
     ic_b1 = ic_beta(b1, se_beta1(s2, sxx), tc)
@@ -73,6 +73,7 @@ def ajustar(var):
         "sigma2": s2,
         "R2": R2,
         "r": r,
+        "T": T,
         "IC_b1_lo": ic_b1[0],
         "IC_b1_hi": ic_b1[1],
         "IC_b0_lo": ic_b0[0],
@@ -90,7 +91,6 @@ tabla = pd.DataFrame(filas).set_index("variable")
 pd.set_option("display.float_format", "{:.6g}".format)
 print(tabla.T)
 
-# Paso 4: elección de la mejor variable
 
 b1_np, b0_np = np.polyfit(x, y, 1)
 print("b1:", b1, b1_np, np.isclose(b1, b1_np))
