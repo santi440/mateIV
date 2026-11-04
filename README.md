@@ -8,6 +8,9 @@ Repo modular: el cálculo vive en `src/`, el informe en `notebooks/informe.ipynb
 - `src/eda.py` — descriptivos, variables discretas e histogramas con unidades
 - `src/normales.py` — A.2: derivadas parciales, sistema normal y contraste con `polyfit`
 - `src/cuadratico.py` — A.1: ajuste cuadrático, derivada y punto crítico
+- `src/multiple.py` — B.5: regresión múltiple matricial y R² ajustado
+- `src/gradiente.py` — A.3: descenso por gradiente con features estandarizadas
+- `src/normales.py` — A.2: derivadas parciales, sistema normal y contraste con `polyfit`
 - `src/plots.py` — helpers de figuras con unidades
 - `notebooks/informe.ipynb` — informe preliminar ejecutable (EDA, A.1, A.2 y B.5)
 - `tests/test_repro.py` — chequeos de reproducibilidad
@@ -28,6 +31,8 @@ python -m scripts.eda
 python -m scripts.a2_normales
 python -m scripts.a1_cuadratico
 python -m scripts.b5_multiple
+python -m scripts.a3_gradiente
+python -m scripts.a2_normales
 ```
 
 Datos: descargar sin commitear:
