@@ -8,6 +8,7 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import numpy as np
 import pandas as pd
 
@@ -63,12 +64,26 @@ def _bins(datos):
 
 
 def figura_histogramas(df, path):
-    """Histogramas 2x3 de las 6 columnas, con unidades en los ejes."""
-    fig, axes = plt.subplots(2, 3, figsize=(13, 7))
+    """Histogramas 2x3 de las 6 columnas, con unidades en los ejes.
+    Para frequency, usa escala logarítmica y barras anchas para visualizar
+    la distribución en forma de campana en todo el rango de Hz.
+    """
+    fig, axes = plt.subplots(2, 3, figsize=(14, 8))
     for ax, col in zip(axes.ravel(), df.columns):
         datos = df[col]
-        ax.hist(datos, bins=_bins(datos), edgecolor="white")
-        ax.set_xlabel(f"{col} ({UNITS[col]})")
+        if col == "frequency":
+            counts = datos.value_counts().sort_index()
+            # Ancho proporcional en escala logarítmica
+            widths = counts.index * 0.18
+            ax.bar(counts.index, counts.values, width=widths, edgecolor="white", align="center", color="tab:blue")
+            ax.set_xscale("log")
+            ax.set_xticks([200, 500, 1000, 2000, 5000, 10000, 20000])
+            ax.xaxis.set_major_formatter(ticker.ScalarFormatter())
+            ax.ticklabel_format(style='plain', axis='x')
+            ax.set_xlabel(f"{col} ({UNITS[col]}) [escala log]")
+        else:
+            ax.hist(datos, bins=_bins(datos), edgecolor="white")
+            ax.set_xlabel(f"{col} ({UNITS[col]})")
         ax.set_ylabel("frecuencia absoluta (mediciones)")
         ax.set_title(f"{col}: {datos.nunique()} valores distintos")
     fig.tight_layout()
