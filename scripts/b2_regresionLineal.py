@@ -1,6 +1,7 @@
 """T2 - Regresiones simples de sound_level (velocity excluida)."""
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from src.data_loader import load_airfoil
 from src.metrics import (
     xbar, ybar, Sxx, Sxy, beta1, beta0,
@@ -96,3 +97,14 @@ b1_np, b0_np = np.polyfit(x, y, 1)
 print("b1:", b1, b1_np, np.isclose(b1, b1_np))
 print("b0:", b0, b0_np, np.isclose(b0, b0_np))
 
+xs = np.linspace(x.min(), x.max(), 200)
+
+fig, ax = plt.subplots(figsize=(7, 4.5))
+ax.scatter(x, y, s=8, alpha=0.4, label="datos")
+ax.plot(xs, b0 + b1 * xs, color="red", label="recta ajustada")
+ax.set_xlabel("frequency (Hz)")
+ax.set_ylabel("sound_level (dB)")
+ax.legend()
+fig.tight_layout()
+fig.savefig("dispersion_frequency.png", dpi=150)
+plt.show()
