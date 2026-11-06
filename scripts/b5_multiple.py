@@ -6,6 +6,7 @@ import numpy as np
 
 from src.data_loader import load_airfoil
 from src.multiple import armar_X_y, betas, r2_ajustado, r2_multiple
+from src.varianza import descomposicion
 
 
 def main():
@@ -23,6 +24,11 @@ def main():
     for nombre, valor, unidad in zip(nombres, b, unidades):
         print(f"{nombre:15s} {valor:14.6e}  {unidad}")
     print(f"R2 = {r2:.4f}   R2 ajustado = {r2a:.4f}")
+
+    # Comparacion con el mejor modelo simple (B.2: frequency), con la misma formula
+    r2s = descomposicion(df["frequency"], df["sound_level"])["R2"]
+    r2s_a = r2_ajustado(r2s, len(y), 1)
+    print(f"Simple (frequency): R2 = {r2s:.4f}   R2 ajustado = {r2s_a:.4f}")
 
     lims = [min(y.min(), yhat.min()), max(y.max(), yhat.max())]
     fig, ax = plt.subplots(figsize=(6.5, 6))
