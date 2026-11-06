@@ -93,6 +93,15 @@ pd.set_option("display.float_format", "{:.6g}".format)
 print(tabla.T)
 
 
+elegida = tabla["R2"].idxmax()   # mayor R2 (y menor sigma2, mayor |T|)
+T_elegida = tabla.loc[elegida, "T"]
+rechaza_h0 = abs(T_elegida) > tc   # tc = t_crit_95(n - 2), calculado arriba
+
+print(f"\nB.3 - variable elegida: {elegida}")
+print(f"T = {T_elegida:.4f}   t(0.025, {n - 2}) = {tc}")
+print(f"|T| > t critico -> {'se rechaza H0' if rechaza_h0 else 'no se rechaza H0'}")
+
+
 b1_np, b0_np = np.polyfit(x, y, 1)
 print("b1:", b1, b1_np, np.isclose(b1, b1_np))
 print("b0:", b0, b0_np, np.isclose(b0, b0_np))
