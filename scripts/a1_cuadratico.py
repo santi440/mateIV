@@ -44,8 +44,8 @@ def main():
     yh_q = evaluar_cuadratico(b0, b1, b2, xg)
     yh_l = bl0 + bl1 * xg
 
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 7), sharex=True,
-                                   gridspec_kw={"hspace": 0.08})
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 8), sharex=False,
+                                   gridspec_kw={"hspace": 0.3})
     ax1.scatter(x, y, s=8, alpha=0.35, label="mediciones (n=1503)")
     ax1.plot(xg, yh_q, lw=2,
              label=f"cuadratico (R2={res['r2_cuadratico']:.3f})")
@@ -55,6 +55,7 @@ def main():
     ax1.plot([crit["x"]], [crit["y"]], "ko", ms=6)
     ax1.annotate(f"minimo x*={crit['x']:.0f} Hz", (crit["x"], crit["y"]),
                  textcoords="offset points", xytext=(8, 12), fontsize=9)
+    ax1.set_xlabel("frequency (Hz)")
     ax1.set_ylabel("sound_level (dB)")
     ax1.legend(fontsize=9)
     ax1.set_title("A.1 — Aproximacion cuadratica vs lineal del ruido (dB) "

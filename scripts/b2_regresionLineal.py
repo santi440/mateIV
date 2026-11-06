@@ -89,8 +89,40 @@ def ajustar(var):
 
 filas = [ajustar(v) for v in VARIABLES]
 tabla = pd.DataFrame(filas).set_index("variable")
-pd.set_option("display.float_format", "{:.6g}".format)
-print(tabla.T)
+
+# Construir cuadro en el formato exacto pedido por el enunciado:
+# Xᵢ | ŷ = β̂₁x + β̂₀ | σ̂² | R² | r | IC(β₁) | IC(β₀) | ICM(Y|x*) | IP(Y|x*)
+filas_cuadro = []
+for v in VARIABLES:
+    r_dict = tabla.loc[v]
+    b1_val = r_dict["b1"]
+    b0_val = r_dict["b0"]
+    
+    # Formatear ecuación
+    signo = "+" if b0_val >= 0 else "-"
+    eq = f"{b1_val:.4g}·x {signo} {abs(b0_val):.4g}"
+    
+    ic_b1_str = f"[{r_dict['IC_b1_lo']:.4g}; {r_dict['IC_b1_hi']:.4g}]"
+    ic_b0_str = f"[{r_dict['IC_b0_lo']:.4g}; {r_dict['IC_b0_hi']:.4g}]"
+    icm_str   = f"[{r_dict['ICM_lo']:.4g}; {r_dict['ICM_hi']:.4g}]"
+    ip_str    = f"[{r_dict['IP_lo']:.4g}; {r_dict['IP_hi']:.4g}]"
+    
+    filas_cuadro.append({
+        "Xᵢ": v,
+        "ŷ = β̂₁x + β̂₀": eq,
+        "σ̂²": f"{r_dict['sigma2']:.4g}",
+        "R²": f"{r_dict['R2']:.4g}",
+        "r": f"{r_dict['r']:.4g}",
+        "IC(β₁)": ic_b1_str,
+        "IC(β₀)": ic_b0_str,
+        "ICM(Y|x*)": icm_str,
+        "IP(Y|x*)": ip_str,
+    })
+
+df_cuadro = pd.DataFrame(filas_cuadro).set_index("Xᵢ")
+print("\n--- CUADRO B.2 (Formato exacto solicitado) ---")
+print(df_cuadro.to_string())
+print("\nNota: x* = 2000 Hz para frequency; x* = x̄ para angle, chord_length y displacement.\n")
 
 
 elegida = tabla["R2"].idxmax()   # mayor R2 (y menor sigma2, mayor |T|)
