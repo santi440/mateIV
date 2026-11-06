@@ -12,7 +12,7 @@ Repo modular: el cálculo vive en `src/`, el informe en `notebooks/informe.ipynb
 - `src/gradiente.py` — A.3: descenso por gradiente con features estandarizadas
 - `src/varianza.py` — B.1 y B.4: STC = SCR + SCE, σ², R² e intervalos ICM/IP en x* = 2000 Hz
 - `src/plots.py` — helpers de figuras con unidades
-- `notebooks/informe.ipynb` — informe preliminar ejecutable (EDA, A.1, A.2 y B.5)
+- `notebooks/informe.ipynb` — informe ejecutable (EDA, A.1–A.3, B.1–B.5); llama a los scripts de `scripts/`
 - `tests/test_repro.py` — chequeos de reproducibilidad
 
 ## Entorno virtual (venv) + requirements
@@ -32,6 +32,7 @@ python -m scripts.a1_cuadratico
 python -m scripts.a2_normales
 python -m scripts.a3_gradiente
 python -m scripts.b1_b4_varianza
+python -m scripts.b2_regresionLineal
 python -m scripts.b5_multiple
 ```
 
